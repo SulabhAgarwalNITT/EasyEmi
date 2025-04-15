@@ -14,4 +14,6 @@ connectDB()
         console.log(`app is listening.`)
     ) )
 })
-.catch()
+.catch( (err) => {
+    console.log("Mongo db connection failed !!!", err)
+} )
