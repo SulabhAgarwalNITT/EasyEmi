@@ -20,7 +20,7 @@ const loanSchema = new mongoose.Schema(
         },
         startDate: {
             type: Date,
-            required: true,
+            // required: true, --> need to check this
         },
         owner : {
             type: mongoose.Schema.Types.ObjectId,

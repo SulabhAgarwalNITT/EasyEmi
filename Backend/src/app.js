@@ -17,12 +17,12 @@ app.use(cookieParser())
 
 // Routes
 import userRouter from "./routes/user.routes.js"
-
+import loanRouter from "./routes/loan.routes.js"
 
 
 // routes declaration
 app.use("/api/v1/users", userRouter)
-
+app.use("/api/v1/loans", loanRouter)
 
 
 app.use((err, req, res, next) => {
