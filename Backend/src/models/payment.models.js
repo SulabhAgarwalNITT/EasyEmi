@@ -23,8 +23,19 @@ const paymentSchema = new mongoose.Schema(
             type: Number,
             required: true
         },
+        emiNumber : {
+            reqired : true,
+            type: Number
+        },
+        userId : {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true
+        }
     },
     {
         timestamps: true
     }
 )
+
+export const Payment = mongoose.model("Payment", paymentSchema)

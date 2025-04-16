@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { ApiError } from "./utils/apiError.util.js";
+import scheduleEMIJob from "./middlewares/paymentSchedule.js";
 
 const app = express()
 
@@ -18,12 +19,14 @@ app.use(cookieParser())
 // Routes
 import userRouter from "./routes/user.routes.js"
 import loanRouter from "./routes/loan.routes.js"
-
+import paymentRouter from "./routes/payment.routes.js"
 
 // routes declaration
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/loans", loanRouter)
+app.use("/api/v1/payments", paymentRouter)
 
+scheduleEMIJob()
 
 app.use((err, req, res, next) => {
     if (err instanceof ApiError) {

@@ -3,6 +3,7 @@ import { ApiError } from "../utils/apiError.util.js";
 import { ApiResponse } from "../utils/apiResponse.util.js";
 import { Loan } from "../models/loan.models.js";
 import { isValidObjectId } from "mongoose";
+import { Payment } from "../models/payment.models.js";
 
 const createLoan = asyncHandler( async (req, res) => {
     // get details from the user
@@ -163,6 +164,7 @@ const deleteLoan = asyncHandler( async (req, res) => {
     }
 
     await Loan.findByIdAndDelete(loanId)
+    await Payment.deleteMany({loanId: loanId})
 
     return res.status(200).json(new ApiResponse(200, loan, "Loan deleted Successfully"))
 })

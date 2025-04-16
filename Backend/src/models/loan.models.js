@@ -40,7 +40,7 @@ const loanSchema = new mongoose.Schema(
             type: String,
             enum: ["active", "foreclosed", "completed"],
             default: "active"
-        }
+        },
     },
     {
         timestamps: true
