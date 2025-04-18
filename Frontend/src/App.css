@@ -4,3 +4,12 @@
   /* padding: 2rem; */
   /* text-align: center; */
 }
+
+
+/* useEffect(() => {
+  const fetchData = async () => {
+    const res = await apiConnecter("GET", "/hi");
+    console.log(res.data); // your array or object
+  };
+  fetchData();
+}, []); */

@@ -114,6 +114,11 @@ const deletePayment = asyncHandler( async (req, res) => {
     return res.status(200).json(new ApiResponse (200, deletedPayment, "Payment deleted successfully"))
 })  
 
+const deleteAll = asyncHandler( async (req, res) => {
+    await Payment.deleteMany({})
+    return res.status(200).json(new ApiResponse (200, {}, "Payment deleted successfully"))
+})  
+
 const getAllPaymentForUser = asyncHandler(async (req, res) => {
     const userId = req.user._id;
 
@@ -200,8 +205,8 @@ const getAllPaymentForLoan = asyncHandler(async (req, res) => {
 });
 
 const markPaymentAsPaid = asyncHandler( async (req, res) => {
+    console.log(1)
     const {paymentId} = req.params
-
     if(!isValidObjectId(paymentId)){
         throw new ApiError(400, "Paymentid not found")
     }
@@ -235,5 +240,6 @@ export {
     deletePayment,
     getAllPaymentForUser,
     getAllPaymentForLoan,
-    markPaymentAsPaid
+    markPaymentAsPaid,
+    deleteAll
 }

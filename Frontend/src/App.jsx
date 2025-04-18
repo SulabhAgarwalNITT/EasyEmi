@@ -1,27 +1,26 @@
-import { useState, useEffect, use } from 'react'
+import React, { useState, useEffect } from 'react'
 import './App.css'
-import { apiConnecter } from './utils/apiconnector'
+import { Routes , Route} from 'react-router-dom'
+import SignUpPage from './Pages/SignUpPage'
+import Navbar from './Pages/Navbar'
+import LoginPage from './Pages/LoginPage'
+import UserDashBoard from './Pages/UserDashboard'
+import AddLoan from './Pages/AddLoand'
+import LoanDetail from './Pages/LoanDetail'
 
 function App() {
-  const [count, setCount] = useState([])
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await apiConnecter("GET", "/hi");
-      console.log(res.data); // your array or object
-    };
-    fetchData();
-  }, []);
-
   return (
-    <>
-      <h1>hii</h1>
-      <div>
-        {count.map((item, index) => (
-          <div key={index}>{item.text1}</div>
-        ))}
-      </div>
-    </>
+    <div className='min-h-screen w-[100%]'>
+      <Navbar/>
+      <Routes>
+        <Route path="/signUp" element={<SignUpPage/>}/>
+        <Route path="/login" element={<LoginPage/>}/>
+
+        <Route path='/user/dashboard'  element={<UserDashBoard/>}/>
+        <Route path='/addLoan' element={<AddLoan/>} />
+        <Route path='/loan/:loanId/details' element={<LoanDetail/>}/>
+      </Routes>
+    </div>
   )
 }
 

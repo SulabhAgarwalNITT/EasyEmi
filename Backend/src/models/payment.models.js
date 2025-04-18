@@ -12,7 +12,7 @@ const paymentSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum : ["paid", "unpaid", "late"],
+            enum : ["paid", "unpaid", "late", "upcoming"],
             required: true
         },
         dueDate: {
