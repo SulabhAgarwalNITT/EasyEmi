@@ -7,7 +7,7 @@ const UserDashBoard = function (){
 
     return (
         <div className="w-[100%]">
-            <div className="w-[60%] mx-auto">
+            <div className="w-[70%] mx-auto">
 
                 {/* setion -1 Three card - total Amount upcoming emi missed*/}
                 <div className="mt-10">

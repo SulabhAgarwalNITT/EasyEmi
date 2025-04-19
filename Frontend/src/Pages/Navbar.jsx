@@ -1,6 +1,8 @@
 import logo from "../assets/Images/logo.jpg"
 import { Link } from "react-router"
 import { useState, useEffect } from "react";
+import { apiConnecter } from "../utils/apiconnector";
+import { toast } from "react-toastify";
 
 const Navbar = function (){
 
@@ -14,6 +16,23 @@ const Navbar = function (){
             setIsLoggedIn(true);  // User is logged in
         }
     }, [isLoggedIn]);
+
+    async function clickHandler() {
+        const confirm = window.confirm("Are you sure you want to logout?")
+        if (!confirm) return;  // If user cancels, do nothing
+
+        // Clear the token from localStorage and update the logged-in state
+        localStorage.removeItem("token");
+        setIsLoggedIn(false);
+        window.location.href = "/login";  // Redirect to login page
+
+        try {
+            const response = await apiConnecter("GET", "/api/v1/users/logout")
+            toast.success(response.data.message || "Logged out successfully")
+        } catch (error) {
+            console.error("Error during logout:", error);
+        }
+    }
 
     return(
         <div className="w-full p-3 bg-blue-500 ">
@@ -37,15 +56,19 @@ const Navbar = function (){
                                     </div>
                 }
                 {
-                    isLoggedIn && 
-                        <div className=" flex gap-4 text-lg">
-                            <Link>
-                                <div>Contact Us</div>
+                    isLoggedIn && (
+                        <div className="flex gap-4 mr-3">
+                            <Link to={"/user/dashboard"} className="">
+                                <button>
+                                    DashBoard
+                                </button>
                             </Link>
-                            <Link>
-                                <div>About Us</div> 
-                            </Link>
+
+                            <button onClick={clickHandler}>
+                                Logout
+                            </button>
                         </div>
+                    )
                 }
             </div>
         </div>

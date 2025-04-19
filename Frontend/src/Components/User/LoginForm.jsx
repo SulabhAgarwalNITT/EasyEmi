@@ -30,6 +30,7 @@ const LoginForm = function (){
             toast.success(response.data?.message || "loggedIn success")
             localStorage.setItem("token", response.data.data.accesstoken)
             localStorage.setItem("user", JSON.stringify(response.data?.data?.user))
+            window.location.href = "/user/dashboard"
             navigate("/user/dashboard")
         } catch (error) {
             console.log("Error during signup", error)

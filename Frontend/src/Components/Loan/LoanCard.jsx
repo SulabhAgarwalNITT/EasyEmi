@@ -28,10 +28,10 @@ const LoanCard = function (){
             {
                 loanData.length > 0 ? (
                     loanData.map((loan) => (
-                        <SingleLoanCard key={loan._id} loan={loan}/>
+                        <SingleLoanCard key={loan._id} loan={loan} setLoanData={setLoanData}/>
                     ))
                 ) : (
-                    <div>No loans found</div>
+                    <div className="w-full mx-auto text-2xl text-center mt-10">No loans found</div>
                 )
             }
         </div>

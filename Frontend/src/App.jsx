@@ -7,12 +7,14 @@ import LoginPage from './Pages/LoginPage'
 import UserDashBoard from './Pages/UserDashboard'
 import AddLoan from './Pages/AddLoand'
 import LoanDetail from './Pages/LoanDetail'
+import HomePage from './Pages/HomePage'
 
 function App() {
   return (
     <div className='min-h-screen w-[100%]'>
       <Navbar/>
       <Routes>
+        <Route path="/" element={<HomePage/>}/>
         <Route path="/signUp" element={<SignUpPage/>}/>
         <Route path="/login" element={<LoginPage/>}/>
 

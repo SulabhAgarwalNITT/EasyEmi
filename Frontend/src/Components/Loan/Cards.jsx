@@ -1,73 +1,3 @@
-// import { useEffect, useState } from "react"
-// import { apiConnecter } from "../../utils/apiconnector"
-
-// const Cards = function (){
-
-//     const [totalLoanDetails, setTotalLoanDetails] = useState(null)
-
-//     useEffect( () => {
-//         async function userLoanDetails() {
-//             try {
-//                 const response = await apiConnecter(
-//                     'GET',
-//                     "/api/v1/loans/totalLoan",
-//                 )
-//                 console.log(response)
-//                 setTotalLoanDetails(response.data.data)
-//             } catch (error) {
-//                 console.log("Error while fetching loan details")
-//             }
-//         }
-//         userLoanDetails()
-//     }, [])
-
-//     return (
-//         <div className="w-full ">
-//             {
-//                 totalLoanDetails ? (
-//                     <div className="w-full flex my-5 justify-between">
-//                         <div className="w-[30%] rounded-lg bg-black text-xl text-white p-4 flex flex-col">
-//                             <div>
-//                                 Total Loan Amount
-//                             </div>
-//                             <div className="text-2xl">
-//                                 Rs. {totalLoanDetails.totalPrincipal}
-//                             </div>
-//                         </div>
-
-//                         <div className="w-[30%] rounded-lg bg-green-500 text-xl text-white p-4 flex flex-col">
-//                             <div>
-//                                 Remaining Amount
-//                             </div>
-//                             <div className="text-2xl">
-//                                 Rs. {totalLoanDetails.remainingAmount}
-//                             </div>
-//                         </div>
-
-//                         <div className="w-[30%] rounded-lg bg-blue-500 text-xl text-white p-4 flex flex-col">
-//                             <div>
-//                                 Total Paid
-//                             </div>
-//                             <div className="text-2xl">
-//                                 Rs. {totalLoanDetails.totalPaid}
-//                             </div>
-//                         </div>
-//                     </div>
-//                 )
-//                 :
-//                 (
-//                     <div>
-                        
-//                     </div>
-//                 )
-//             }
-//         </div>
-//     )
-// }
-
-// export default Cards
-
-
 import { useEffect, useState } from "react";
 import { apiConnecter } from "../../utils/apiconnector";
 
@@ -80,6 +10,7 @@ const Cards = function () {
             try {
                 const response = await apiConnecter('GET', "/api/v1/loans/totalLoan");
                 setTotalLoanDetails(response.data.data);
+                console.log(response.data.data);
             } catch (error) {
                 console.log("Error while fetching loan details");
             } finally {
@@ -100,24 +31,31 @@ const Cards = function () {
                 <div className="text-center my-4 text-gray-500 text-lg">Loading loan summary...</div>
             ) : totalLoanDetails ? (
                 <div className="w-full flex my-5 justify-between">
-                    <div className="w-[30%] rounded-lg bg-black text-xl text-white p-4 flex flex-col">
+                    <div className="w-[24%] rounded-lg bg-black text-xl text-white p-4 flex flex-col">
                         <div>Total Loan Amount</div>
                         <div className="text-2xl">
                             {formatCurrency(totalLoanDetails.totalPrincipal)}
                         </div>
                     </div>
 
-                    <div className="w-[30%] rounded-lg bg-green-500 text-xl text-white p-4 flex flex-col">
+                    <div className="w-[24%] rounded-lg bg-green-500 text-xl text-white p-4 flex flex-col">
                         <div>Remaining Amount</div>
                         <div className="text-2xl">
                             {formatCurrency(totalLoanDetails.remainingAmount)}
                         </div>
                     </div>
 
-                    <div className="w-[30%] rounded-lg bg-blue-500 text-xl text-white p-4 flex flex-col">
+                    <div className="w-[24%] rounded-lg bg-blue-500 text-xl text-white p-4 flex flex-col">
                         <div>Total Paid</div>
                         <div className="text-2xl">
                             {formatCurrency(totalLoanDetails.totalPaid)}
+                        </div>
+                    </div>
+
+                    <div className="w-[24%] rounded-lg bg-red-500 text-xl text-white p-4 flex flex-col">
+                        <div>Total Interest</div>
+                        <div className="text-2xl">
+                            {formatCurrency(totalLoanDetails.totalInterest)}
                         </div>
                     </div>
                 </div>

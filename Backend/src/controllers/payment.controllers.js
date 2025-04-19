@@ -4,6 +4,7 @@ import { ApiResponse } from "../utils/apiResponse.util.js";
 import mongoose, { isValidObjectId } from "mongoose";
 import { Loan } from "../models/loan.models.js";
 import { Payment } from "../models/payment.models.js";
+import { mailSender } from "../utils/mailSender.util.js";
 
 // Helper: Safely adds i month while preserving end-of-month
 function addiMonth(date, i) {
@@ -64,37 +65,62 @@ const createInitialPayment = asyncHandler ( async (req, res) => {
 
 export const autoGenerateMonthlyPayment = async () => {
     const today = new Date();
-    const activeLoans = await Loan.find({ status: "active" });
-    for (const loan of activeLoans) {
-        const { startDate, tenureMonths, emiAmount, _id: loanId, owner } = loan;
-        for (let i = 0; i < tenureMonths; i++) {
-            let dueDate = addiMonth(startDate , i+1);
-
-            if (dueDate > today) break;
-
-            const startOfDay = new Date(dueDate);
-            startOfDay.setHours(0, 0, 0, 0);
-            const endOfDay = new Date(dueDate);
-            endOfDay.setHours(23, 59, 59, 999);
-
-            const existing = await Payment.findOne({
-                loanId,
-                dueDate: { $gte: startOfDay, $lte: endOfDay }
-            });
-
-            if (existing) continue;
-            await Payment.create({
-                loanId,
-                dueDate,
-                amount: Math.round(emiAmount),
-                status: "unpaid",
-                emiNumber: i+1,
-                userId: owner
-            });
-
-        }
+    today.setHours(0, 0, 0, 0);
+  
+    const twoDaysLater = new Date();
+    twoDaysLater.setDate(twoDaysLater.getDate() + 2);
+    twoDaysLater.setHours(23, 59, 59, 999);
+  
+    const paymentsToUpdate = await Payment.find({
+      status: "upcoming",
+      dueDate: {
+        $gte: today,         // from today
+        $lte: twoDaysLater   // to 2 days from now
+      }
+    });
+  
+    for (const payment of paymentsToUpdate) {
+      payment.status = "unpaid";
+      await payment.save();
     }
-};
+  };
+
+export const sendEmailReminder = async () => {
+    const today = new Date();
+    const reminderDate = new Date(today);
+    reminderDate.setDate(today.getDate() + 3);
+    reminderDate.setHours(0, 0, 0, 0);
+    console.log(1)
+    const endOfReminderDay = new Date(reminderDate);
+    endOfReminderDay.setHours(23, 59, 59, 999);
+    console.log(2)
+  
+    const upcomingPayments = await Payment.find({
+      dueDate: { $gte: reminderDate, $lte: endOfReminderDay },
+      status: "upcoming"
+    }).populate("userId").populate("loanId");
+    console.log(3)
+  
+    for (const payment of upcomingPayments) {
+        console.log(payment)
+      const email = payment.userId.email;
+      const loanTitle = payment.loanId.title || "your loan";
+      const dueDate = new Date(payment.dueDate).toLocaleDateString();
+      const amount = payment.amount;
+  
+      const title = "⏰ EMI Payment Reminder - EasyEMI";
+      const body = `
+        <p>Hi ${payment.userId.name || ''},</p>
+        <p>This is a friendly reminder that your EMI of <strong>₹${amount}</strong> for <strong>${loanTitle}</strong> is due on <strong>${dueDate}</strong>.</p>
+        <p>Please make the payment on time to avoid any penalties.</p>
+        <br/>
+        <p>Thank you,<br/>EasyEMI Team</p>
+      `;
+        console.log("Sending email to: ")
+      await mailSender(email, title, body);
+    }
+  };
+  
 
 const deletePayment = asyncHandler( async (req, res) => {
     const {paymentId} = req.params;
@@ -241,5 +267,5 @@ export {
     getAllPaymentForUser,
     getAllPaymentForLoan,
     markPaymentAsPaid,
-    deleteAll
+    deleteAll,
 }
